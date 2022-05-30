@@ -7,15 +7,15 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct GameBoard: View {
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        let setGame = SetGame()
+        SetGameView(setGame: setGame)
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        GameBoard()
     }
 }

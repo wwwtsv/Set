@@ -8,12 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		191610022844A22F00173C1A /* SetApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 191610012844A22F00173C1A /* SetApp.swift */; };
-		191610042844A22F00173C1A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 191610032844A22F00173C1A /* ContentView.swift */; };
+		191610042844A22F00173C1A /* GameBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 191610032844A22F00173C1A /* GameBoard.swift */; };
 		191610062844A22F00173C1A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 191610052844A22F00173C1A /* Assets.xcassets */; };
 		191610092844A22F00173C1A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 191610082844A22F00173C1A /* Preview Assets.xcassets */; };
 		191610132844A23000173C1A /* SetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 191610122844A23000173C1A /* SetTests.swift */; };
 		1916101D2844A23000173C1A /* SetUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1916101C2844A23000173C1A /* SetUITests.swift */; };
 		1916101F2844A23000173C1A /* SetUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1916101E2844A23000173C1A /* SetUITestsLaunchTests.swift */; };
+		1916102F284559AA00173C1A /* SetGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1916102E284559AA00173C1A /* SetGameView.swift */; };
+		1916103128455AA000173C1A /* SetGameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1916103028455AA000173C1A /* SetGameModel.swift */; };
+		1916103428455E3400173C1A /* Diamond.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1916103328455E3400173C1A /* Diamond.swift */; };
+		1916103628455EFE00173C1A /* SetGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1916103528455EFE00173C1A /* SetGame.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,7 +40,7 @@
 /* Begin PBXFileReference section */
 		19160FFE2844A22F00173C1A /* Set.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Set.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		191610012844A22F00173C1A /* SetApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetApp.swift; sourceTree = "<group>"; };
-		191610032844A22F00173C1A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		191610032844A22F00173C1A /* GameBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameBoard.swift; sourceTree = "<group>"; };
 		191610052844A22F00173C1A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		191610082844A22F00173C1A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		1916100E2844A23000173C1A /* SetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -44,6 +48,10 @@
 		191610182844A23000173C1A /* SetUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SetUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1916101C2844A23000173C1A /* SetUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetUITests.swift; sourceTree = "<group>"; };
 		1916101E2844A23000173C1A /* SetUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		1916102E284559AA00173C1A /* SetGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetGameView.swift; sourceTree = "<group>"; };
+		1916103028455AA000173C1A /* SetGameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetGameModel.swift; sourceTree = "<group>"; };
+		1916103328455E3400173C1A /* Diamond.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diamond.swift; sourceTree = "<group>"; };
+		1916103528455EFE00173C1A /* SetGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetGame.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,8 +102,12 @@
 		191610002844A22F00173C1A /* Set */ = {
 			isa = PBXGroup;
 			children = (
+				1916103228455D7C00173C1A /* Shapes */,
+				1916102D2845583A00173C1A /* ViewModels */,
+				1916102C2845583700173C1A /* Models */,
+				1916102B2845583000173C1A /* Views */,
 				191610012844A22F00173C1A /* SetApp.swift */,
-				191610032844A22F00173C1A /* ContentView.swift */,
+				191610032844A22F00173C1A /* GameBoard.swift */,
 				191610052844A22F00173C1A /* Assets.xcassets */,
 				191610072844A22F00173C1A /* Preview Content */,
 			);
@@ -125,6 +137,38 @@
 				1916101E2844A23000173C1A /* SetUITestsLaunchTests.swift */,
 			);
 			path = SetUITests;
+			sourceTree = "<group>";
+		};
+		1916102B2845583000173C1A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				1916102E284559AA00173C1A /* SetGameView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		1916102C2845583700173C1A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				1916103028455AA000173C1A /* SetGameModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		1916102D2845583A00173C1A /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				1916103528455EFE00173C1A /* SetGame.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		1916103228455D7C00173C1A /* Shapes */ = {
+			isa = PBXGroup;
+			children = (
+				1916103328455E3400173C1A /* Diamond.swift */,
+			);
+			path = Shapes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -257,8 +301,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				191610042844A22F00173C1A /* ContentView.swift in Sources */,
+				1916103128455AA000173C1A /* SetGameModel.swift in Sources */,
+				191610042844A22F00173C1A /* GameBoard.swift in Sources */,
 				191610022844A22F00173C1A /* SetApp.swift in Sources */,
+				1916103428455E3400173C1A /* Diamond.swift in Sources */,
+				1916103628455EFE00173C1A /* SetGame.swift in Sources */,
+				1916102F284559AA00173C1A /* SetGameView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
