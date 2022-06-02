@@ -7,25 +7,30 @@
 
 import Foundation
 
-
 class SetGame {
-    var setGameModel = createSetGame()
+    let setGame: SetGameModel<Appearance>
+    let setTheme: ThemeModel
     
-    var cards: [SetGame.Card] {
-        setGameModel.cards
+    var cards: [Card] {
+        setGame.cards
     }
     
-    private static func createSetGame() -> SetGame {
-        SetGameModel<String, String>(quantity: 12, createCardContent, createCardColor)
+    init(cardQuantity: Int) {
+        setTheme = ThemeModel(cardsQuantity: cardQuantity)
+        setGame = SetGameModel<ThemeModel.Appearance>(quantity: cardQuantity, appearance: Array(setTheme.set))
     }
     
-    private static func createCardContent() -> String {
-        "🤡"
-    }
+    typealias SetGame = SetGameModel<Appearance>
     
-    private static func createCardColor() -> String {
-        "Black"
-    }
+    typealias Card = SetGame.Card
     
-    typealias SetGame = SetGameModel<String, String>
+    typealias Appearance = ThemeModel.Appearance
+    
+    typealias Shape = ThemeModel.Shape
+    
+    typealias Color = ThemeModel.Color
+    
+    typealias Fill = ThemeModel.Fill
+    
+    typealias Quantity = ThemeModel.Quantity
 }

@@ -7,21 +7,18 @@
 
 import Foundation
 
-struct SetGameModel<CardContent, Color> {
+struct SetGameModel<CardContent> where CardContent: Equatable {
     private(set) var cards: [Card] = []
     
-    init(quantity: Int, _ createCardContent: () -> CardContent, _ createCardColor: () -> Color) {
-        for i in 0..<quantity {
-            cards.append(Card(id: i, content: createCardContent(), color: createCardColor()))
+    init(quantity: Int, appearance: [CardContent]) {
+        for index in 0...quantity {
+            cards.append(Card(id: index, content: appearance[index]))
         }
     }
-    
-    
     
     struct Card: Identifiable {
         let id: Int
         let content: CardContent
-        let color: Color
         
         var selected = false
         var isMatched = false
