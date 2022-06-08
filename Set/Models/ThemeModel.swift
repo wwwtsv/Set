@@ -10,7 +10,7 @@ import Foundation
 struct ThemeModel {
     private(set) var set: Set<Appearance> = []
     
-    let shapes: [Shape] = [.diamond, .oval, .wave]
+    let shapes: [Shape] = [.diamond, .circle, .rectangle]
     let colors: [Color] = [.green, .red, .purple]
     let fills: [Fill] = [.opacity, .solid, .transparent]
     let quantity: [Quantity] = [.one, .two, .three]
@@ -37,8 +37,8 @@ struct ThemeModel {
     
     enum Shape {
         case diamond
-        case oval
-        case wave
+        case rectangle
+        case circle
     }
     
     enum Color {

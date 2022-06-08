@@ -7,8 +7,7 @@
 
 import SwiftUI
 
-struct Diamond: Shape {
-    
+struct Diamond: InsettableShape {
     func path(in rect: CGRect) -> Path {
         let center = CGPoint(x: rect.midX, y: rect.midY)
         let area = min(rect.width, rect.height) / 2
@@ -28,4 +27,7 @@ struct Diamond: Shape {
         return p
     }
 
+    func inset(by amount: CGFloat) -> some InsettableShape {
+        return self
+    }
 }

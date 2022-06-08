@@ -7,12 +7,19 @@
 
 import Foundation
 
-class SetGame {
-    let setGame: SetGameModel<Appearance>
+class SetGame: ObservableObject {
+    @Published var setGame: SetGameModel<Appearance>
     let setTheme: ThemeModel
     
     var cards: [Card] {
         setGame.cards
+    }
+    
+    func choose(_ selectedCard: Card) {
+        let index = setGame.cards.firstIndex { card in card.id == selectedCard.id }
+        if let cardIndex = index {
+            setGame.choose(cardIndex)
+        }
     }
     
     init(cardQuantity: Int) {
