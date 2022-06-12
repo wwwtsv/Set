@@ -8,7 +8,7 @@
 import Foundation
 
 struct ThemeModel {
-    private(set) var set: Set<Appearance> = []
+    private(set) var set: Set<CardTheme> = []
     
     let shapes: [Shape] = [.diamond, .circle, .rectangle]
     let colors: [Color] = [.green, .red, .purple]
@@ -18,7 +18,7 @@ struct ThemeModel {
     init(cardsQuantity: Int) {
         while set.count <= cardsQuantity {
             set.insert(
-                Appearance(
+                CardTheme(
                     shape: shapes.randomElement()!,
                     color: colors.randomElement()!,
                     fill: fills.randomElement()!,
@@ -28,34 +28,68 @@ struct ThemeModel {
         }
     }
     
-    struct Appearance: Hashable {
+    struct CardTheme: ThemeAppearance, Hashable {
         let shape: Shape
         let color: Color
         let fill: Fill
         let quantity: Quantity
+        
+        static func compare(content collection: [ThemeAppearance]) -> Bool {
+            var contentTypesMap: [Int: Int] = [:]
+            
+            func processMap(hash: Int) {
+                if contentTypesMap[hash] != nil {
+                    contentTypesMap[hash]! += 1
+                } else {
+                    contentTypesMap[hash] = 1
+                }
+            }
+            
+            for content in collection {
+                processMap(hash: content.shape.hashValue)
+                processMap(hash: content.color.hashValue)
+                processMap(hash: content.fill.hashValue)
+                processMap(hash: content.quantity.hashValue)
+                
+                return contentTypesMap.allSatisfy { _, quantity in
+                    quantity == 3 || quantity == 1
+                }
+            }
+            
+            return false
+        }
     }
     
-    enum Shape {
+    enum Shape: Hashable {
         case diamond
         case rectangle
         case circle
     }
     
-    enum Color {
+    enum Color: Hashable {
         case red
         case green
         case purple
     }
     
-    enum Fill {
+    enum Fill: Hashable {
         case opacity
         case transparent
         case solid
     }
     
-    enum Quantity {
+    enum Quantity: Hashable {
         case one
         case two
         case three
     }
+}
+
+protocol ThemeAppearance {
+    var shape: ThemeModel.Shape { get }
+    var color: ThemeModel.Color { get }
+    var fill: ThemeModel.Fill { get }
+    var quantity: ThemeModel.Quantity { get }
+    
+    static func compare(content collection: [ThemeAppearance]) -> Bool
 }

@@ -54,7 +54,7 @@ struct CardView: View {
     var filledShape: some View {
         switch card.content.fill {
         case .transparent:
-            shape().strokeBorder(getColor(), lineWidth: 3)
+            shape().strokeBorder(getColor(), lineWidth: 2)
         case .solid:
             shape().foregroundColor(getColor())
         case .opacity:

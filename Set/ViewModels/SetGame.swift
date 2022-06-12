@@ -24,14 +24,14 @@ class SetGame: ObservableObject {
     
     init(cardQuantity: Int) {
         setTheme = ThemeModel(cardsQuantity: cardQuantity)
-        setGame = SetGameModel<ThemeModel.Appearance>(quantity: cardQuantity, appearance: Array(setTheme.set))
+        setGame = SetGameModel<ThemeModel.CardTheme>(appearance: Array(setTheme.set))
     }
     
     typealias SetGame = SetGameModel<Appearance>
     
     typealias Card = SetGame.Card
     
-    typealias Appearance = ThemeModel.Appearance
+    typealias Appearance = ThemeModel.CardTheme
     
     typealias Shape = ThemeModel.Shape
     

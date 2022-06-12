@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct Diamond: InsettableShape {
+    var insetAmount = 0.0
+    
     func path(in rect: CGRect) -> Path {
         let center = CGPoint(x: rect.midX, y: rect.midY)
-        let area = min(rect.width, rect.height) / 2
+        let area = min(rect.width, rect.height) / 2 - insetAmount
         
         let leftCoord = CGPoint(x: center.x - area, y: center.y)
         let rightCoord = CGPoint(x: center.x + area, y: center.y)
@@ -28,6 +30,8 @@ struct Diamond: InsettableShape {
     }
 
     func inset(by amount: CGFloat) -> some InsettableShape {
+        var diamond = self
+        diamond.insetAmount += amount
         return self
     }
 }
