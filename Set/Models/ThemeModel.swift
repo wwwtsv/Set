@@ -16,7 +16,7 @@ struct ThemeModel {
     let quantity: [Quantity] = [.one, .two, .three]
     
     init(cardsQuantity: Int) {
-        while set.count <= cardsQuantity {
+        while set.count < cardsQuantity {
             set.insert(
                 CardTheme(
                     shape: shapes.randomElement()!,
@@ -50,13 +50,11 @@ struct ThemeModel {
                 processMap(hash: content.color.hashValue)
                 processMap(hash: content.fill.hashValue)
                 processMap(hash: content.quantity.hashValue)
-                
-                return contentTypesMap.allSatisfy { _, quantity in
-                    quantity == 3 || quantity == 1
-                }
             }
             
-            return false
+            return contentTypesMap.allSatisfy { _, quantity in
+                quantity == 3 || quantity == 1
+            }
         }
     }
     

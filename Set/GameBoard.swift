@@ -9,7 +9,7 @@ import SwiftUI
 
 struct GameBoard: View {
     var body: some View {
-        let setGame = SetGame(cardQuantity: 24)
+        let setGame = SetGame(cardQuantity: 12)
         SetGameView(setGame: setGame)
     }
 }

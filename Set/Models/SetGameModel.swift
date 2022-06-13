@@ -45,9 +45,9 @@ struct SetGameModel<CardContent> where CardContent: ThemeAppearance {
         }
         
         if let threeCards = selectedCards {
-            let cardContent = threeCards.map { $0.content }
+            let cardsContent = threeCards.map { $0.content }
 
-            if CardContent.compare(content: cardContent) {
+            if CardContent.compare(content: cardsContent) {
                 removedCards = threeCards
             }
         }

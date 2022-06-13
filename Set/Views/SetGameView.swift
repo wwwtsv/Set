@@ -11,14 +11,18 @@ struct SetGameView: View {
     @ObservedObject var setGame: SetGame
     
     var body: some View {
-        ScrollView {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 62))]) {
-                ForEach(setGame.cards) { card in
-                    CardView(card: card).onTapGesture {
-                        setGame.choose(card)
-                    }
-                }
+        VStack {
+            AspectVGrid(items: setGame.cards, aspectRatio: 2/3) { card in
+                CardView(card: card).onTapGesture {
+                    setGame.choose(card)
+                }.padding(4)
             }.padding()
+            Spacer()
+            Button(action: {
+                setGame.newGame()
+            }, label: {
+                Text("New game").font(.largeTitle)
+            })
         }
     }
 }
@@ -29,14 +33,14 @@ struct CardView: View {
     var body: some View {
         ZStack {
             if card.selected {
-                RoundedRectangle(cornerRadius: 12).strokeBorder(.red, lineWidth: 4)
+                RoundedRectangle(cornerRadius: 12).strokeBorder(.blue, lineWidth: 6)
             } else {
                 RoundedRectangle(cornerRadius: 12).strokeBorder(.black, lineWidth: 3)
             }
             VStack {
-                resultShape.padding()
+                resultShape.padding(12)
             }
-        }.aspectRatio(2/3, contentMode: .fit)
+        }
     }
     
     func shape() -> some InsettableShape {
