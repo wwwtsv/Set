@@ -21,6 +21,7 @@
 		1916103E2849403300173C1A /* ThemeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1916103D2849403300173C1A /* ThemeModel.swift */; };
 		1925DC67284F24580012033D /* AnyShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1925DC66284F24580012033D /* AnyShape.swift */; };
 		198DB77D28572C2D000B5D8E /* AspectVGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 198DB77C28572C2D000B5D8E /* AspectVGrid.swift */; };
+		19DDB440285A8384007F1FD6 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DDB43F285A8384007F1FD6 /* CardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,7 @@
 		1916103D2849403300173C1A /* ThemeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeModel.swift; sourceTree = "<group>"; };
 		1925DC66284F24580012033D /* AnyShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyShape.swift; sourceTree = "<group>"; };
 		198DB77C28572C2D000B5D8E /* AspectVGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectVGrid.swift; sourceTree = "<group>"; };
+		19DDB43F285A8384007F1FD6 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,6 +152,7 @@
 			children = (
 				1916102E284559AA00173C1A /* SetGameView.swift */,
 				198DB77C28572C2D000B5D8E /* AspectVGrid.swift */,
+				19DDB43F285A8384007F1FD6 /* CardView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -314,6 +317,7 @@
 				1916103128455AA000173C1A /* SetGameModel.swift in Sources */,
 				1925DC67284F24580012033D /* AnyShape.swift in Sources */,
 				191610042844A22F00173C1A /* GameBoard.swift in Sources */,
+				19DDB440285A8384007F1FD6 /* CardView.swift in Sources */,
 				191610022844A22F00173C1A /* SetApp.swift in Sources */,
 				1916103428455E3400173C1A /* Diamond.swift in Sources */,
 				1916103628455EFE00173C1A /* SetGame.swift in Sources */,

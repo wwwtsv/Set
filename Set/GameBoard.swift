@@ -9,7 +9,7 @@ import SwiftUI
 
 struct GameBoard: View {
     var body: some View {
-        let setGame = SetGame(cardQuantity: 12)
+        let setGame = SetGame()
         SetGameView(setGame: setGame)
     }
 }
@@ -17,5 +17,6 @@ struct GameBoard: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         GameBoard()
+        GameBoard().preferredColorScheme(.dark)
     }
 }

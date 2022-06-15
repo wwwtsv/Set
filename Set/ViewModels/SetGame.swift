@@ -10,14 +10,22 @@ import Foundation
 class SetGame: ObservableObject {
     @Published var setGame: SetGameModel<Appearance>
     var setTheme: ThemeModel
-    var cardQuantity: Int
+    var cardQuantity = 81
+    
+    var endGame: Bool {
+        setGame.cards.isEmpty && setGame.deck.isEmpty
+    }
     
     var cards: [Card] {
         setGame.cards
     }
     
-    var hasMissmatch: Bool {
-        setGame.cards.filter { $0.selected }.count == 3
+    var hasMissMatch: IsMatch {
+        setGame.isMatch
+    }
+    
+    func dealMoreCards() {
+        setGame.dealMoreCards()
     }
     
     func choose(_ selectedCard: Card) {
@@ -27,11 +35,9 @@ class SetGame: ObservableObject {
         }
     }
     
-    init(cardQuantity: Int) {
+    init() {
         setTheme = ThemeModel(cardsQuantity: cardQuantity)
         setGame = SetGameModel<ThemeModel.CardTheme>(appearance: Array(setTheme.set))
-        
-        self.cardQuantity = cardQuantity
     }
     
     func newGame() {

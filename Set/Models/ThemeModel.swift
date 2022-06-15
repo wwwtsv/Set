@@ -58,28 +58,28 @@ struct ThemeModel {
         }
     }
     
-    enum Shape: Hashable {
-        case diamond
-        case rectangle
-        case circle
+    enum Shape: Int, Hashable {
+        case diamond = 0
+        case rectangle = 1
+        case circle = 2
     }
     
-    enum Color: Hashable {
-        case red
-        case green
-        case purple
+    enum Color: Int, Hashable {
+        case red = 3
+        case green = 4
+        case purple = 5
     }
     
-    enum Fill: Hashable {
-        case opacity
-        case transparent
-        case solid
+    enum Fill: Int, Hashable {
+        case opacity = 6
+        case transparent = 7
+        case solid = 8
     }
     
-    enum Quantity: Hashable {
-        case one
-        case two
-        case three
+    enum Quantity: Int, Hashable {
+        case one = 9
+        case two = 10
+        case three = 11
     }
 }
 
