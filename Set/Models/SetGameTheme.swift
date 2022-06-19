@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ThemeModel {
+struct SetGameTheme {
     private(set) var set: Set<CardTheme> = []
     
     let shapes: [Shape] = [.diamond, .circle, .rectangle]
@@ -15,7 +15,7 @@ struct ThemeModel {
     let fills: [Fill] = [.opacity, .solid, .transparent]
     let quantity: [Quantity] = [.one, .two, .three]
     
-    init(cardsQuantity: Int) {
+    init(_ cardsQuantity: Int) {
         while set.count < cardsQuantity {
             set.insert(
                 CardTheme(
@@ -84,10 +84,10 @@ struct ThemeModel {
 }
 
 protocol ThemeAppearance {
-    var shape: ThemeModel.Shape { get }
-    var color: ThemeModel.Color { get }
-    var fill: ThemeModel.Fill { get }
-    var quantity: ThemeModel.Quantity { get }
+    var shape: SetGameTheme.Shape { get }
+    var color: SetGameTheme.Color { get }
+    var fill: SetGameTheme.Fill { get }
+    var quantity: SetGameTheme.Quantity { get }
     
     static func compare(content collection: [ThemeAppearance]) -> Bool
 }

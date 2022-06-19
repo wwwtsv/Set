@@ -63,7 +63,7 @@ struct SetGameModel<CardContent> where CardContent: ThemeAppearance {
             deck.append(Card(id: index, content: appearance[index]))
         }
         
-        for _ in 0...min(12, deck.count) {
+        for _ in 0..<min(12, deck.count) {
             cards.append(deck.removeLast())
         }
     }
@@ -111,7 +111,7 @@ struct SetGameModel<CardContent> where CardContent: ThemeAppearance {
     
     private mutating func addCards(_ quantity: Int) {
         if deck.count >= 2 {
-            for _ in 0..<quantity - 1 {
+            for _ in 0...quantity - 1 {
                 cards.append(deck.removeLast())
             }
         }

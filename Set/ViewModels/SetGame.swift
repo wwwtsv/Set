@@ -9,7 +9,7 @@ import Foundation
 
 class SetGame: ObservableObject {
     @Published var setGame: SetGameModel<Appearance>
-    var setTheme: ThemeModel
+    var setTheme: SetGameTheme
     var cardQuantity = 81
     
     var endGame: Bool {
@@ -36,26 +36,26 @@ class SetGame: ObservableObject {
     }
     
     init() {
-        setTheme = ThemeModel(cardsQuantity: cardQuantity)
-        setGame = SetGameModel<ThemeModel.CardTheme>(appearance: Array(setTheme.set))
+        setTheme = SetGameTheme(cardQuantity)
+        setGame = SetGameModel<SetGameTheme.CardTheme>(appearance: Array(setTheme.set))
     }
     
     func newGame() {
-        setTheme = ThemeModel(cardsQuantity: cardQuantity)
-        setGame = SetGameModel<ThemeModel.CardTheme>(appearance: Array(setTheme.set))
+        setTheme = SetGameTheme(cardQuantity)
+        setGame = SetGameModel<SetGameTheme.CardTheme>(appearance: Array(setTheme.set))
     }
     
     typealias SetGame = SetGameModel<Appearance>
     
     typealias Card = SetGame.Card
     
-    typealias Appearance = ThemeModel.CardTheme
+    typealias Appearance = SetGameTheme.CardTheme
     
-    typealias Shape = ThemeModel.Shape
+    typealias Shape = SetGameTheme.Shape
     
-    typealias Color = ThemeModel.Color
+    typealias Color = SetGameTheme.Color
     
-    typealias Fill = ThemeModel.Fill
+    typealias Fill = SetGameTheme.Fill
     
-    typealias Quantity = ThemeModel.Quantity
+    typealias Quantity = SetGameTheme.Quantity
 }
