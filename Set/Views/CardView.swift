@@ -14,15 +14,15 @@ struct CardView: View {
     var body: some View {
         ZStack {
             let rectangle = RoundedRectangle(cornerRadius: Const.cardRadius)
-            rectangle.fill(.white)
+            rectangle.fill(Color(red: 255 / 255, green: 253 / 255, blue: 208 / 255))
             if card.selected {
                 switch hasMissMatch {
                 case .none:
-                    rectangle.strokeBorder(.blue, lineWidth: Const.cardLineWidth)
+                    rectangle.strokeBorder(.blue, lineWidth: Const.selectedCardLineWidth)
                 case .yes:
-                    rectangle.strokeBorder(.green, lineWidth: Const.cardLineWidth)
+                    rectangle.strokeBorder(.green, lineWidth: Const.selectedCardLineWidth)
                 case .no:
-                    rectangle.strokeBorder(.red, lineWidth: Const.cardLineWidth)
+                    rectangle.strokeBorder(.red, lineWidth: Const.selectedCardLineWidth)
                 }
             } else {
                 rectangle.strokeBorder(.black, lineWidth: Const.cardLineWidth)
@@ -79,7 +79,8 @@ struct CardView: View {
     }
     
     private struct Const {
-        static let cardLineWidth: CGFloat = 4
+        static let cardLineWidth: CGFloat = 2
+        static let selectedCardLineWidth: CGFloat = 4
         static let shapeLineWidth: CGFloat = 2
         static let cardRadius: CGFloat = 12
         static let shapeOpacity: CGFloat = 0.4

@@ -15,6 +15,10 @@ struct SetGameModel<CardContent> where CardContent: ThemeAppearance {
         cards.filter({ card in card.selected }).onlyThreeElements
     }
     
+    var currentPlayer = Player.one
+    var players: [String: Int] = [Player.one: 0, Player.two: 0]
+    var roundTimer = 30
+    
     private var removedCards: [Card] = [] {
         willSet {
             if deck.count >= 2 {
@@ -95,17 +99,29 @@ struct SetGameModel<CardContent> where CardContent: ThemeAppearance {
         }
     }
     
-    mutating func dealMoreCards() {
+    mutating func dealMoreCards(_ hasValidSet: Bool) {
         if let threeCards = selectedCards {
             let cardsContent = threeCards.map { $0.content }
             
             if (CardContent.compare(content: cardsContent)) {
                 removedCards = threeCards
+                if players[currentPlayer] != nil {
+                    if roundTimer > 0 {
+                        players[currentPlayer]! += 3
+                    } else {
+                        players[currentPlayer]! += 1
+                    }
+                    currentPlayer = players.keys.first(where: { $0 != currentPlayer })!
+                }
             } else {
                 addCards(3)
             }
         } else {
             addCards(3)
+        }
+        
+        if hasValidSet {
+            players[currentPlayer]! += -1
         }
     }
     
@@ -124,6 +140,11 @@ struct SetGameModel<CardContent> where CardContent: ThemeAppearance {
         var selected = false
         var isMatched = false
     }
+}
+
+struct Player {
+    static let one = "Player 1"
+    static let two = "Player 2"
 }
 
 enum IsMatch {

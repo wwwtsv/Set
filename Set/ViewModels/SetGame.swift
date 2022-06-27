@@ -16,6 +16,14 @@ class SetGame: ObservableObject {
         setGame.cards.isEmpty && setGame.deck.isEmpty
     }
     
+    var roundTimer: Int {
+        setGame.roundTimer
+    }
+    
+    var score: (String, Int, String, Int) {
+        ("Player 1", setGame.players["Player 1"]!, "Player 2", setGame.players["Player 2"]!)
+    }
+    
     var cards: [Card] {
         setGame.cards
     }
@@ -25,7 +33,12 @@ class SetGame: ObservableObject {
     }
     
     func dealMoreCards() {
-        setGame.dealMoreCards()
+        let hasValidSet = setTheme.hasValidSet(content: setGame.cards.map { card in card.content })
+        setGame.dealMoreCards(hasValidSet)
+    }
+    
+    func updateTimer(by time: Int) {
+        setGame.roundTimer = max(0, time)
     }
     
     func choose(_ selectedCard: Card) {

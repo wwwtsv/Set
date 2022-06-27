@@ -16,7 +16,7 @@ struct SetGameTheme {
     let quantity: [Quantity] = [.one, .two, .three]
     
     init(_ cardsQuantity: Int) {
-        while set.count < cardsQuantity {
+        while set.count < min(cardsQuantity, ThemeConst.maxCardCount) {
             set.insert(
                 CardTheme(
                     shape: shapes.randomElement()!,
@@ -28,29 +28,29 @@ struct SetGameTheme {
         }
     }
     
+    func hasValidSet(content collection: [ThemeAppearance]) -> Bool {
+        for i in 0..<collection.count {
+            for j in i + 1..<collection.count {
+                for k in j + 1..<collection.count {
+                    if CardTheme.compare(content: [collection[i], collection[j], collection[k]]) {
+                        return true
+                    }
+                }
+            }
+        }
+        return false
+    }
+    
     struct CardTheme: ThemeAppearance, Hashable {
         let shape: Shape
         let color: Color
         let fill: Fill
         let quantity: Quantity
         
+        // TODO: move it in ViewModel
         static func compare(content collection: [ThemeAppearance]) -> Bool {
-            var contentTypesMap: [Int: Int] = [:]
-            
-            func processMap(hash: Int) {
-                if contentTypesMap[hash] != nil {
-                    contentTypesMap[hash]! += 1
-                } else {
-                    contentTypesMap[hash] = 1
-                }
-            }
-            
-            for content in collection {
-                processMap(hash: content.shape.hashValue)
-                processMap(hash: content.color.hashValue)
-                processMap(hash: content.fill.hashValue)
-                processMap(hash: content.quantity.hashValue)
-            }
+            // TODO: change compare logic using first card flags
+            let contentTypesMap = createContentMap(from: collection)
             
             return contentTypesMap.allSatisfy { _, quantity in
                 quantity == 3 || quantity == 1
@@ -58,29 +58,54 @@ struct SetGameTheme {
         }
     }
     
-    enum Shape: Int, Hashable {
+    enum Shape: Int {
         case diamond = 0
         case rectangle = 1
         case circle = 2
     }
     
-    enum Color: Int, Hashable {
+    enum Color: Int {
         case red = 3
         case green = 4
         case purple = 5
     }
     
-    enum Fill: Int, Hashable {
+    enum Fill: Int {
         case opacity = 6
         case transparent = 7
         case solid = 8
     }
     
-    enum Quantity: Int, Hashable {
+    enum Quantity: Int {
         case one = 9
         case two = 10
         case three = 11
     }
+    
+    private struct ThemeConst {
+        static let maxCardCount = 81
+    }
+}
+
+func createContentMap(from collection: [ThemeAppearance]) -> [Int: Int] {
+    var contentTypesMap: [Int: Int] = [:]
+    
+    func processMap(hash: Int) {
+        if contentTypesMap[hash] != nil {
+            contentTypesMap[hash]! += 1
+        } else {
+            contentTypesMap[hash] = 1
+        }
+    }
+    
+    for content in collection {
+        processMap(hash: content.shape.rawValue)
+        processMap(hash: content.color.rawValue)
+        processMap(hash: content.fill.rawValue)
+        processMap(hash: content.quantity.rawValue)
+    }
+    
+    return contentTypesMap
 }
 
 protocol ThemeAppearance {
@@ -90,4 +115,22 @@ protocol ThemeAppearance {
     var quantity: SetGameTheme.Quantity { get }
     
     static func compare(content collection: [ThemeAppearance]) -> Bool
+}
+
+fileprivate extension Dictionary where Value == Int, Key == Int {
+    var sortByValue: [(key: Key, value: Value)] {
+        let result = sorted(by: { (first, second) in
+            let (_, val) = first
+            let (_, val1) = second
+            return val > val1
+        })
+        
+        return result
+    }
+}
+
+fileprivate extension Array {
+    var hasMatchedContent: Bool {
+        count == 3
+    }
 }

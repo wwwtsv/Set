@@ -9,9 +9,20 @@ import SwiftUI
 
 struct SetGameView: View {
     @ObservedObject var setGame: SetGame
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     var body: some View {
         VStack {
+            VStack {
+                HStack {
+                    let (first, firstScore, second, secondScore) = setGame.score
+                    Text("\(first) - Score: \(firstScore), ")
+                    Text("\(second) - Score: \(secondScore)")
+                }.padding(.bottom, 2)
+                Text("Time: \(setGame.roundTimer)").onReceive(timer) { _ in
+                    setGame.updateTimer(by: setGame.roundTimer - 1)
+                }
+            }
             AspectVGrid(items: setGame.cards, aspectRatio: 2/3) { card in
                 CardView(card: card, hasMissMatch: setGame.hasMissMatch).onTapGesture {
                     setGame.choose(card)
