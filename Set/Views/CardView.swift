@@ -12,29 +12,15 @@ struct CardView: View {
     let hasMissMatch: IsMatch
 
     var body: some View {
-        ZStack {
-            let rectangle = RoundedRectangle(cornerRadius: Const.cardRadius)
-            rectangle.fill(Color(red: 255 / 255, green: 253 / 255, blue: 208 / 255))
-            if card.selected {
-                switch hasMissMatch {
-                case .none:
-                    rectangle.strokeBorder(.blue, lineWidth: Const.selectedCardLineWidth)
-                case .yes:
-                    rectangle.strokeBorder(.green, lineWidth: Const.selectedCardLineWidth)
-                case .no:
-                    rectangle.strokeBorder(.red, lineWidth: Const.selectedCardLineWidth)
-                }
-            } else {
-                rectangle.strokeBorder(.black, lineWidth: Const.cardLineWidth)
+        VStack {
+            switch card.content.shape {
+            case .circle: cloneShapes(shape: Circle())
+            case .diamond: cloneShapes(shape: Diamond())
+            case .rectangle: cloneShapes(shape: Rectangle())
             }
-            VStack {
-                switch card.content.shape {
-                case .circle: cloneShapes(shape: Circle())
-                case .diamond: cloneShapes(shape: Diamond())
-                case .rectangle: cloneShapes(shape: Rectangle())
-                }
-            }.padding(12)
         }
+        .padding(12)
+        .cardify(selected: card.selected, hasMissMatch: hasMissMatch)
     }
     
     func fillShape<T: InsettableShape>(shape: T) -> some View {
@@ -42,10 +28,14 @@ struct CardView: View {
             switch card.content.fill {
             case .transparent:
                 shape.strokeBorder(getColor(), lineWidth: Const.shapeLineWidth)
+                    .aspectRatio(3/2, contentMode: .fit)
             case .solid:
                 shape.foregroundColor(getColor())
+                    .aspectRatio(3/2, contentMode: .fit)
             case .opacity:
-                shape.foregroundColor(getColor()).opacity(Const.shapeOpacity)
+                shape.foregroundColor(getColor())
+                    .opacity(Const.shapeOpacity)
+                    .aspectRatio(3/2, contentMode: .fit)
             }
         }
     }
@@ -77,12 +67,44 @@ struct CardView: View {
             return Color.green
         }
     }
+}
+
+struct Cardify: ViewModifier {
+    let selected: Bool
+    let hasMissMatch: IsMatch
     
-    private struct Const {
-        static let cardLineWidth: CGFloat = 2
-        static let selectedCardLineWidth: CGFloat = 4
-        static let shapeLineWidth: CGFloat = 2
-        static let cardRadius: CGFloat = 12
-        static let shapeOpacity: CGFloat = 0.4
+    func body(content: Content) -> some View {
+        ZStack {
+            let rectangle = RoundedRectangle(cornerRadius: Const.cardRadius)
+            rectangle.fill(Color(red: 255 / 255, green: 253 / 255, blue: 208 / 255))
+            if selected {
+                switch hasMissMatch {
+                case .none:
+                    rectangle.strokeBorder(.blue, lineWidth: Const.selectedCardLineWidth)
+                case .yes:
+                    rectangle.strokeBorder(.green, lineWidth: Const.selectedCardLineWidth)
+                case .no:
+                    rectangle.strokeBorder(.red, lineWidth: Const.selectedCardLineWidth)
+                }
+            } else {
+                rectangle.strokeBorder(.black, lineWidth: Const.cardLineWidth)
+            }
+            content
+        }
     }
+    
+}
+
+extension View {
+    func cardify(selected: Bool, hasMissMatch: IsMatch) -> some View {
+        self.modifier(Cardify(selected: selected, hasMissMatch: hasMissMatch))
+    }
+}
+
+private struct Const {
+    static let cardLineWidth: CGFloat = 2
+    static let selectedCardLineWidth: CGFloat = 4
+    static let shapeLineWidth: CGFloat = 2
+    static let cardRadius: CGFloat = 12
+    static let shapeOpacity: CGFloat = 0.4
 }

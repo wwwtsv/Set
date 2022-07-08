@@ -28,6 +28,10 @@ class SetGame: ObservableObject {
         setGame.cards
     }
     
+    var deck: [Card] {
+        setGame.deck
+    }
+    
     var hasMissMatch: IsMatch {
         setGame.isMatch
     }
