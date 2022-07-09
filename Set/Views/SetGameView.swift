@@ -26,11 +26,13 @@ struct SetGameView: View {
     var body: some View {
         VStack {
             score
-            cardsField
-            
-            deck
+            ZStack(alignment: .bottom) {
+                cardsField
+                deck
+            }
             controls
         }
+        
     }
     
     var score: some View {
@@ -67,13 +69,13 @@ struct SetGameView: View {
             ForEach(setGame.cards.filter(isUndealt)) { card in
                 CardView(card: card, hasMissMatch: setGame.hasMissMatch)
                     .matchedGeometryEffect(id: card.id, in: dealingNamespace)
-                    .transition(.asymmetric(insertion: .opacity, removal: .scale))
+                    .transition(.asymmetric(insertion: .identity, removal: .identity))
             }
         }
         .frame(width: Const.cardWidth, height: Const.cardHeight)
         .onTapGesture() {
-            withAnimation(.easeInOut(duration: 3)) {
-                setGame.cards.forEach { card in
+            setGame.cards.forEach { card in
+                withAnimation(.easeInOut(duration: 3)) {
                     deal(card: card)
                 }
             }
@@ -83,10 +85,10 @@ struct SetGameView: View {
     var controls: some View {
         HStack {
             Button(action: {
-                withAnimation {
+                withAnimation(.easeInOut(duration: 3)) {
                     dealt = []
-                    setGame.newGame()
                 }
+                setGame.newGame()
             }, label: {
                 Text("New game").font(.system(.title2))
             })
