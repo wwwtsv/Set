@@ -13,26 +13,19 @@ struct SetGameView: View {
     
     @Namespace private var dealingNamespace
     
-    @State private var dealt: Set<Int> = []
-    
-    private func deal(card: SetGame.Card) {
-        dealt.insert(card.id)
-    }
-    
-    private func isUndealt(card: SetGame.Card) -> Bool {
-        !dealt.contains(card.id)
-    }
-    
     var body: some View {
         VStack {
             score
             ZStack(alignment: .bottom) {
                 cardsField
-                deck
+                HStack {
+                    deck
+                    Spacer()
+                    discardPile
+                }.padding(.horizontal)
             }
             controls
         }
-        
     }
     
     var score: some View {
@@ -43,64 +36,69 @@ struct SetGameView: View {
                 Text("\(second) - Score: \(secondScore)")
             }.padding(.bottom, 2)
             Text("Time: \(setGame.roundTimer)").onReceive(timer) { _ in
-                setGame.updateTimer(by: setGame.roundTimer - 1)
+                if !setGame.isNotStarted {
+                    setGame.updateTimer(by: setGame.roundTimer - 1)
+                }
             }
         }
     }
     
     var cardsField: some View {
         AspectVGrid(items: setGame.cards, aspectRatio: 2/3) { card in
-            if isUndealt(card: card) {
-                Color.clear
-            } else {
-                CardView(card: card, hasMissMatch: setGame.hasMissMatch)
-                    .matchedGeometryEffect(id: card.id, in: dealingNamespace)
-                    .transition(.asymmetric(insertion: .identity, removal: .scale))
-                    .padding(4)
-                    .onTapGesture {
-                        setGame.choose(card)
-                    }
-            }
+            CardView(card: card)
+                .matchedGeometryEffect(id: card.id, in: dealingNamespace)
+                .transition(.asymmetric(insertion: .identity, removal: .scale))
+                .padding(4)
+                .onTapGesture {
+                    setGame.choose(card)
+                }
         }.padding()
     }
     
     var deck: some View {
         ZStack {
-            ForEach(setGame.cards.filter(isUndealt)) { card in
-                CardView(card: card, hasMissMatch: setGame.hasMissMatch)
+            ForEach(setGame.deck) { card in
+                let cardIndex = setGame.deck.firstIndex(where: { $0.id == card.id }) ?? 0
+                CardView(card: card)
+                    .reverse()
                     .matchedGeometryEffect(id: card.id, in: dealingNamespace)
                     .transition(.asymmetric(insertion: .identity, removal: .identity))
+                    .offset(x: CGFloat(cardIndex) * Const.cardOffset, y: CGFloat(cardIndex) * Const.cardOffset)
             }
         }
         .frame(width: Const.cardWidth, height: Const.cardHeight)
         .onTapGesture() {
-            setGame.cards.forEach { card in
-                withAnimation(.easeInOut(duration: 3)) {
-                    deal(card: card)
+            withAnimation {
+                if setGame.isNotStarted {
+                    setGame.startGame()
+                } else if !setGame.ended {
+                    setGame.dealMoreCards()
                 }
             }
         }
     }
     
+    var discardPile: some View {
+        ZStack {
+            ForEach(setGame.matchedCards) { card in
+                let cardIndex = setGame.matchedCards.firstIndex(where: { $0.id == card.id }) ?? 0
+                CardView(card: card)
+                    .matchedGeometryEffect(id: card.id, in: dealingNamespace)
+                    .transition(.asymmetric(insertion: .identity, removal: .identity))
+                    .offset(x: CGFloat(cardIndex) * Const.cardOffset, y: CGFloat(cardIndex) * Const.cardOffset)
+            }
+        }
+        .frame(width: Const.cardWidth, height: Const.cardHeight)
+    }
+    
     var controls: some View {
-        HStack {
-            Button(action: {
-                withAnimation(.easeInOut(duration: 3)) {
-                    dealt = []
-                }
+        Button(action: {
+            withAnimation {
                 setGame.newGame()
-            }, label: {
-                Text("New game").font(.system(.title2))
-            })
-            Spacer()
-            Button(action: {
-                if !setGame.endGame {
-                    setGame.dealMoreCards()
-                }
-            }, label: {
-                Text("Deal").font(.system(.title3)).disabled(setGame.endGame)
-            })
-        }.padding(.horizontal, 24)
+            }
+        }, label: {
+            Text("New game").font(.system(.title2))
+        })
     }
 }
 
@@ -108,4 +106,5 @@ private struct Const {
     static let cardAspectRatio: CGFloat = 2/3
     static let cardHeight: CGFloat = 123
     static let cardWidth: CGFloat = cardAspectRatio * cardHeight
+    static let cardOffset: CGFloat = 0.15
 }

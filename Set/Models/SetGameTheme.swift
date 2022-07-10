@@ -117,18 +117,6 @@ protocol ThemeAppearance {
     static func compare(content collection: [ThemeAppearance]) -> Bool
 }
 
-fileprivate extension Dictionary where Value == Int, Key == Int {
-    var sortByValue: [(key: Key, value: Value)] {
-        let result = sorted(by: { (first, second) in
-            let (_, val) = first
-            let (_, val1) = second
-            return val > val1
-        })
-        
-        return result
-    }
-}
-
 fileprivate extension Array {
     var hasMatchedContent: Bool {
         count == 3

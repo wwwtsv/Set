@@ -9,8 +9,9 @@ import Foundation
 
 struct SetGameModel<CardContent> where CardContent: ThemeAppearance {
     private(set) var cards: [Card] = []
-    private(set) var isMatch = IsMatch.none
     private(set) var deck: [Card] = []
+    private(set) var matchedCards: [Card] = []
+    
     private var selectedCards: [Card]? {
         cards.filter({ card in card.selected }).onlyThreeElements
     }
@@ -21,25 +22,23 @@ struct SetGameModel<CardContent> where CardContent: ThemeAppearance {
     
     private var removedCards: [Card] = [] {
         willSet {
-            if deck.count >= 2 {
-                newValue.forEach { selectedCards in
-                    let index = getCardIndex(selectedCards)
-                    
-                    if let cardIndex = index {
+            newValue.forEach { cardToRemove in
+                if let cardIndex = getCardIndex(cardToRemove) {
+                    matchedCards.append(cardToRemove)
+                    if !deck.isEmpty && cards.count <= Const.startCardCount {
                         cards[cardIndex] = deck.removeLast()
+                    } else {
+                        cards = cards.filter { !$0.isMatched }
                     }
                 }
-            } else {
-                newValue.forEach { selectedCard in
-                    let index = getCardIndex(selectedCard)
-                    
-                    if let cardIndex = index {
-                        cards[cardIndex].isMatched = true
-                    }
+            }
+            
+            // Clear selection
+            for card in matchedCards {
+                if let cardIndex = matchedCards.firstIndex(where: { $0.id == card.id }) {
+                    matchedCards[cardIndex].isMatched = false
+                    matchedCards[cardIndex].selected = false
                 }
-                
-                // Remove already matched cards
-                cards = cards.filter { !$0.isMatched }
             }
         }
     }
@@ -47,18 +46,11 @@ struct SetGameModel<CardContent> where CardContent: ThemeAppearance {
     private var deselectedCards: [Card] = [] {
         willSet {
             newValue.forEach { selectedCard in
-                let index = getCardIndex(selectedCard)
-                
-                if let cardIndex = index {
+                if let cardIndex = getCardIndex(selectedCard) {
                     cards[cardIndex].selected = false
+                    cards[cardIndex].missMatched = false
                 }
             }
-        }
-    }
-    
-    func getCardIndex(_ selectedCard: Card) -> Int? {
-        cards.firstIndex { card in
-            selectedCard.id == card.id
         }
     }
     
@@ -66,8 +58,10 @@ struct SetGameModel<CardContent> where CardContent: ThemeAppearance {
         for index in 0..<appearance.count {
             deck.append(Card(id: index, content: appearance[index]))
         }
-        
-        for _ in 0..<min(12, deck.count) {
+    }
+    
+    mutating func startGame() {
+        for _ in 0..<min(Const.startCardCount, deck.count) {
             cards.append(deck.removeLast())
         }
     }
@@ -75,27 +69,30 @@ struct SetGameModel<CardContent> where CardContent: ThemeAppearance {
     mutating func choose(_ cardIndex: Int) {
         if let threeCards = selectedCards {
             let cardsContent = threeCards.map { $0.content }
-
+            
             if !CardContent.compare(content: cardsContent) {
                 deselectedCards = threeCards
             }
         }
         
-        if isMatch == .none || isMatch == .no {
-            cards[cardIndex].selected = !cards[cardIndex].selected
-        }
+        cards[cardIndex].selected = !cards[cardIndex].selected
         
-        // Setting up whether match or not
         if let threeCards = selectedCards {
             let cardsContent = threeCards.map { $0.content }
-            
+            // Setting up whether match or not
             if CardContent.compare(content: cardsContent) {
-                isMatch = .yes
+                for card in threeCards {
+                    if let index = getCardIndex(card) {
+                        cards[index].isMatched = true
+                    }
+                }
             } else {
-                isMatch = .no
+                for card in threeCards {
+                    if let index = getCardIndex(card) {
+                        cards[index].missMatched = true
+                    }
+                }
             }
-        } else {
-            isMatch = .none
         }
     }
     
@@ -112,16 +109,19 @@ struct SetGameModel<CardContent> where CardContent: ThemeAppearance {
                         players[currentPlayer]! += 1
                     }
                     currentPlayer = players.keys.first(where: { $0 != currentPlayer })!
+                    roundTimer = 30
                 }
             } else {
+                if hasValidSet {
+                    players[currentPlayer]! += -1
+                }
                 addCards(3)
             }
         } else {
+            if hasValidSet {
+                players[currentPlayer]! += -1
+            }
             addCards(3)
-        }
-        
-        if hasValidSet {
-            players[currentPlayer]! += -1
         }
     }
     
@@ -133,12 +133,19 @@ struct SetGameModel<CardContent> where CardContent: ThemeAppearance {
         }
     }
     
+    func getCardIndex(_ selectedCard: Card) -> Int? {
+        cards.firstIndex { card in
+            selectedCard.id == card.id
+        }
+    }
+    
     struct Card: Identifiable {
         let id: Int
         let content: CardContent
         
         var selected = false
         var isMatched = false
+        var missMatched = false
     }
 }
 
@@ -147,14 +154,12 @@ struct Player {
     static let two = "Player 2"
 }
 
-enum IsMatch {
-    case none
-    case yes
-    case no
-}
-
 fileprivate extension Array {
     var onlyThreeElements: [Element]? {
         count == 3 ? self : nil
     }
+}
+
+private struct Const {
+    static let startCardCount = 12
 }

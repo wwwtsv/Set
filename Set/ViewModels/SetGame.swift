@@ -12,8 +12,12 @@ class SetGame: ObservableObject {
     var setTheme: SetGameTheme
     var cardQuantity = 81
     
-    var endGame: Bool {
+    var ended: Bool {
         setGame.cards.isEmpty && setGame.deck.isEmpty
+    }
+    
+    var isNotStarted: Bool {
+        setGame.cards.isEmpty && setGame.deck.count > 0
     }
     
     var roundTimer: Int {
@@ -32,8 +36,8 @@ class SetGame: ObservableObject {
         setGame.deck
     }
     
-    var hasMissMatch: IsMatch {
-        setGame.isMatch
+    var matchedCards: [Card] {
+        setGame.matchedCards
     }
     
     func dealMoreCards() {
@@ -60,6 +64,10 @@ class SetGame: ObservableObject {
     func newGame() {
         setTheme = SetGameTheme(cardQuantity)
         setGame = SetGameModel<SetGameTheme.CardTheme>(appearance: Array(setTheme.set))
+    }
+    
+    func startGame() {
+        setGame.startGame()
     }
     
     typealias SetGame = SetGameModel<Appearance>

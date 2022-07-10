@@ -9,7 +9,6 @@ import SwiftUI
 
 struct CardView: View {
     let card: SetGame.Card
-    let hasMissMatch: IsMatch
 
     var body: some View {
         VStack {
@@ -20,7 +19,7 @@ struct CardView: View {
             }
         }
         .padding(12)
-        .cardify(selected: card.selected, hasMissMatch: hasMissMatch)
+        .cardify(card: card)
     }
     
     func fillShape<T: InsettableShape>(shape: T) -> some View {
@@ -53,7 +52,7 @@ struct CardView: View {
                 fillShape(shape: shape)
                 fillShape(shape: shape)
             }
-        }
+        }.transition(.identity)
     }
     
     
@@ -70,34 +69,44 @@ struct CardView: View {
 }
 
 struct Cardify: ViewModifier {
-    let selected: Bool
-    let hasMissMatch: IsMatch
+    let card: SetGame.Card
     
     func body(content: Content) -> some View {
         ZStack {
             let rectangle = RoundedRectangle(cornerRadius: Const.cardRadius)
             rectangle.fill(Color(red: 255 / 255, green: 253 / 255, blue: 208 / 255))
-            if selected {
-                switch hasMissMatch {
-                case .none:
-                    rectangle.strokeBorder(.blue, lineWidth: Const.selectedCardLineWidth)
-                case .yes:
-                    rectangle.strokeBorder(.green, lineWidth: Const.selectedCardLineWidth)
-                case .no:
-                    rectangle.strokeBorder(.red, lineWidth: Const.selectedCardLineWidth)
-                }
+            if card.missMatched {
+                rectangle.strokeBorder(.red, lineWidth: Const.selectedCardLineWidth)
+            } else if card.isMatched {
+                rectangle.strokeBorder(.green, lineWidth: Const.selectedCardLineWidth)
+            } else if card.selected {
+                rectangle.strokeBorder(.blue, lineWidth: Const.selectedCardLineWidth)
             } else {
                 rectangle.strokeBorder(.black, lineWidth: Const.cardLineWidth)
             }
             content
         }
     }
-    
+}
+
+struct Reversed: ViewModifier {
+    func body(content: Content) -> some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: Const.cardRadius)
+                .fill(Color(red: 255 / 255, green: 253 / 255, blue: 208 / 255))
+            RoundedRectangle(cornerRadius: Const.cardRadius)
+                .strokeBorder(.black, lineWidth: Const.cardLineWidth)
+            Text("Set").font(.system(size: 24, weight: .bold, design: .default))
+        }
+    }
 }
 
 extension View {
-    func cardify(selected: Bool, hasMissMatch: IsMatch) -> some View {
-        self.modifier(Cardify(selected: selected, hasMissMatch: hasMissMatch))
+    func cardify(card: SetGame.Card) -> some View {
+        self.modifier(Cardify(card: card))
+    }
+    func reverse() -> some View {
+        self.modifier(Reversed())
     }
 }
 
